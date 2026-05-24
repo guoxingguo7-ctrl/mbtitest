@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎲 MBTI 深层人格图谱测试（120题·生活场景版）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f2;
+    --card: #ffffff;
+    --text: #1a1917;
+    --muted: #6b6a66;
+    --hint: #9e9d99;
+    --border: rgba(0,0,0,0.12);
+    --border-sm: rgba(0,0,0,0.08);
+    --radius: 14px;
+    --radius-sm: 8px;
+
+    --ei-col: #4f46e5;
+    --ei-bg: #eef2ff;
+    --sn-col: #d97706;
+    --sn-bg: #fffbeb;
+    --tf-col: #0891b2;
+    --tf-bg: #ecfeff;
+    --jp-col: #16a34a;
+    --jp-bg: #f0fdf4;
+
+    --sel-1: #e24b4a;
+    --sel-2: #e88a23;
+    --sel-3: #888780;
+    --sel-4: #1d9e75;
+    --sel-5: #4f46e5;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--card);
+    border-bottom: 0.5px solid var(--border-sm);
+    padding: 24px 20px 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-emoji { font-size: 32px; margin-bottom: 6px; }
+  .header h1 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .header p { font-size: 13px; color: var(--muted); }
+
+  /* ===== PROGRESS ===== */
+  .progress-bar {
+    position: sticky;
+    top: 105px;
+    z-index: 99;
+    background: var(--card);
+    padding: 10px 20px;
+    border-bottom: 0.5px solid var(--border-sm);
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--border-sm);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ei-col), var(--sn-col), var(--tf-col), var(--jp-col));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--hint);
+    margin-top: 6px;
+  }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--card);
+    border-bottom: 0.5px solid var(--border-sm);
+    position: sticky;
+    top: 145px;
+    z-index: 98;
+  }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ===== SECTION ===== */
+  .section {
+    max-width: 680px;
+    margin: 24px auto;
+    padding: 0 16px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 0.5px solid var(--border-sm);
+  }
+  .section-icon { font-size: 20px; }
+  .section-title { font-size: 15px; font-weight: 500; }
+  .section-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  /* ===== QUESTION CARD ===== */
+  .q-card {
+    background: var(--card);
+    border: 0.5px solid var(--border-sm);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .q-card.answered { border-color: rgba(0,0,0,0.15); }
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .q-num {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--hint);
+    min-width: 28px;
+  }
+  .q-dim {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .dim-ei { background: var(--ei-bg); color: var(--ei-col); }
+  .dim-sn { background: var(--sn-bg); color: var(--sn-col); }
+  .dim-tf { background: var(--tf-bg); color: var(--tf-col); }
+  .dim-jp { background: var(--jp-bg); color: var(--jp-col); }
+
+  .q-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  /* ===== SCALE ===== */
+  .scale {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .scale-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 4px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 0;
+  }
+  .scale-btn:active { transform: scale(0.95); }
+  .scale-num {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .scale-label {
+    font-size: 9px;
+    color: var(--hint);
+    text-align: center;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Selected states */
+  .scale-btn[data-v="1"].active { background: var(--sel-1); border-color: var(--sel-1); }
+  .scale-btn[data-v="1"].active .scale-num,
+  .scale-btn[data-v="1"].active .scale-label { color: #fff; }
+
+  .scale-btn[data-v="2"].active { background: var(--sel-2); border-color: var(--sel-2); }
+  .scale-btn[data-v="2"].active .scale-num,
+  .scale-btn[data-v="2"].active .scale-label { color: #fff; }
+
+  .scale-btn[data-v="3"].active { background: var(--sel-3); border-color: var(--sel-3); }
+  .scale-btn[data-v="3"].active .scale-num,
+  .scale-btn[data-v="3"].active .scale-label { color: #fff; }
+
+  .scale-btn[data-v="4"].active { background: var(--sel-4); border-color: var(--sel-4); }
+  .scale-btn[data-v="4"].active .scale-num,
+  .scale-btn[data-v="4"].active .scale-label { color: #fff; }
+
+  .scale-btn[data-v="5"].active { background: var(--sel-5); border-color: var(--sel-5); }
+  .scale-btn[data-v="5"].active .scale-num,
+  .scale-btn[data-v="5"].active .scale-label { color: #fff; }
+
+  /* ===== SUBMIT BAR ===== */
+  .submit-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--card);
+    border-top: 0.5px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 200;
+  }
+  .submit-info { flex: 1; font-size: 13px; color: var(--muted); }
+  .submit-info strong { color: var(--text); font-weight: 500; }
+  .btn-submit {
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--text);
+    color: #fff;
+    transition: opacity 0.2s;
+  }
+  .btn-submit:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-submit:not(:disabled):hover { opacity: 0.85; }
+
+  /* ===== RESULT PAGE ===== */
+  #result-page { display: none; max-width: 680px; margin: 0 auto; padding: 24px 16px 120px; }
+  .result-hero {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border-sm);
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .result-type {
+    font-size: 56px;
+    font-weight: 500;
+    letter-spacing: 6px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .result-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .result-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+
+  /* ===== DIM BARS ===== */
+  .dim-bars { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .dim-bar-card {
+    background: var(--card);
+    border: 0.5px solid var(--border-sm);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .dim-bar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .dim-bar-left { font-weight: 500; }
+  .dim-bar-right { font-weight: 500; }
+  .dim-bar-pct { font-size: 12px; color: var(--muted); }
+  .dim-track {
+    height: 8px;
+    background: var(--border-sm);
+    border-radius: 4px;
+    overflow: visible;
+    position: relative;
+  }
+  .dim-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .dim-mid {
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 14px;
+    background: var(--border);
+  }
+
+  /* ===== TRAITS ===== */
+  .traits-card {
+    background: var(--card);
+    border: 0.5px solid var(--border-sm);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .traits-title { font-size: 13px; font-weight: 500; margin-bottom: 12px; color: var(--muted); }
+  .traits-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .trait-tag {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: var(--bg);
+    color: var(--text);
+    border: 0.5px solid var(--border);
+  }
+
+  /* ===== ACTION BUTTONS ===== */
+  .action-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .btn-action {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border);
+    background: var(--card);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  .btn-action:hover { background: var(--bg); }
+  .btn-action.primary {
+    background: var(--text);
+    color: #fff;
+    border-color: var(--text);
+  }
+  .btn-action.primary:hover { opacity: 0.85; }
+
+  /* ===== SHARE MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 500;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 36px;
+    width: 100%;
+    max-width: 480px;
+  }
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .modal-title { font-size: 15px; font-weight: 500; margin-bottom: 16px; }
+  .share-url {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--muted);
+    word-break: break-all;
+    gap: 8px;
+  }
+  .share-url-text { flex: 1; }
+  .btn-copy {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 0.5px solid var(--border);
+    background: var(--card);
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  .share-note { font-size: 12px; color: var(--hint); line-height: 1.6; }
+  .modal-close {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border);
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 16px;
+    color: var(--muted);
+  }
+
+  /* ===== SCROLL TO TOP ===== */
+  .back-top {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 150;
+    opacity: 0.7;
+  }
+  .back-top.show { display: flex; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(26,25,23,0.9);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.25s;
+    z-index: 600;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 480px) {
+    .scale-label { display: none; }
+    .scale-btn { padding: 10px 4px 10px; }
+    .scale-num { font-size: 16px; }
+    .result-type { font-size: 42px; letter-spacing: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- QUIZ PAGE -->
+<div id="quiz-page">
+  <div class="header">
+    <div class="header-emoji">🎲</div>
+    <h1>MBTI 深层人格图谱测试</h1>
+    <p>120题 · 生活场景版 · 根据第一直觉作答效果最佳</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-text">
+      <span id="progress-count">已答 0 / 120 题</span>
+      <span id="progress-pct">0%</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="legend-dot" style="background:#4f46e5"></span>E/I 能量</span>
+    <span><span class="legend-dot" style="background:#d97706"></span>S/N 感知</span>
+    <span><span class="legend-dot" style="background:#0891b2"></span>T/F 决策</span>
+    <span><span class="legend-dot" style="background:#16a34a"></span>J/P 秩序</span>
+    <span style="margin-left:4px; color:#9e9d99">⑤极像 ④有点 ③中立 ②不太 ①极不</span>
+  </div>
+
+  <div id="questions-container"></div>
+
+  <div class="submit-bar">
+    <div class="submit-info"><strong id="answered-count">0</strong> / 120 已作答</div>
+    <button class="btn-submit" id="btn-submit" disabled onclick="submitQuiz()">查看结果</button>
+  </div>
+</div>
+
+<!-- RESULT PAGE -->
+<div id="result-page">
+  <div class="result-hero" id="result-hero">
+    <div class="result-type" id="result-type-text">INFJ</div>
+    <div class="result-name" id="result-name-text">提倡者</div>
+    <div class="result-desc" id="result-desc-text"></div>
+  </div>
+
+  <div class="dim-bars" id="dim-bars"></div>
+
+  <div class="traits-card">
+    <div class="traits-title">你的典型特质</div>
+    <div class="traits-grid" id="traits-grid"></div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn-action" onclick="retakeQuiz()">重新测试</button>
+    <button class="btn-action primary" onclick="openShare()">分享结果</button>
+  </div>
+
+  <div class="traits-card" id="detail-section">
+    <div class="traits-title">完整维度分析</div>
+    <div id="detail-content" style="font-size:13px;color:var(--muted);line-height:1.8;"></div>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="modal-overlay" id="share-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">分享给朋友</div>
+    <div class="share-url">
+      <div class="share-url-text" id="share-url-text"></div>
+      <button class="btn-copy" onclick="copyUrl()">复制</button>
+    </div>
+    <div class="share-note">
+      复制链接发给朋友，他们可以独立完成测试并查看自己的结果。<br>
+      本测试完全在浏览器本地运行，不收集任何个人数据。
+    </div>
+    <button class="modal-close" onclick="closeShare()">关闭</button>
+  </div>
+</div>
+
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  QUESTIONS DATA
+// ============================================================
+const QUESTIONS = [
+  // ===== E/I 维度 (1-30) =====
+  // 题1-30全部是I方向（高分=倾向I），反向计分=E
+  {id:1, dim:'ei', dir:'I', text:'周末朋友突然组局，即便你原本没安排，也会觉得"好烦，被打乱了"而不是"好耶"。'},
+  {id:2, dim:'ei', dir:'I', text:'在聚会中，比起成为焦点，你更享受躲在角落观察人类行为。'},
+  {id:3, dim:'ei', dir:'I', text:'即使心里很想见某人，也会因为"出门太麻烦"而选择线上聊天。'},
+  {id:4, dim:'ei', dir:'I', text:'你经常发现，自己在脑子里已经把某件事排练了八百遍，开口却只说了两个字。'},
+  {id:5, dim:'ei', dir:'I', text:'人多的时候你会自动开启"省电模式"，不想说话只想发呆。'},
+  {id:6, dim:'ei', dir:'I', text:'比起电话沟通，你更愿意发长语音或文字，因为这样可以编辑和修改。'},
+  {id:7, dim:'ei', dir:'I', text:'旅行途中如果一直有人同行，你会感到社交能量透支，急需一个人躲一会儿。'},
+  {id:8, dim:'ei', dir:'I', text:'你更喜欢一对一的深度谈话，而不是一群人的狂欢。'},
+  {id:9, dim:'ei', dir:'I', text:'当你兴奋地分享一件事时，如果对方反应平淡，你会立刻闭嘴并后悔。'},
+  {id:10, dim:'ei', dir:'I', text:'你家里的"避难所"（如书房、浴室）是你一天中最期待待的地方。'},
+  {id:11, dim:'ei', dir:'I', text:'你在人群中会感到一种莫名的"感官过载"（太吵、太亮、气味太杂）。'},
+  {id:12, dim:'ei', dir:'I', text:'即使是好朋友，你也很少主动发起聊天，通常是被动回应。'},
+  {id:13, dim:'ei', dir:'I', text:'周末两天的完美安排是：宅家看书、刷剧、打游戏，哪儿也不去。'},
+  {id:14, dim:'ei', dir:'I', text:'你觉得"下次一起吃饭"通常只是一种客套，并不真的期待落实。'},
+  {id:15, dim:'ei', dir:'I', text:'你在陌生环境里，会下意识观察逃生通道和人群动向。'},
+  {id:16, dim:'ei', dir:'I', text:'比起参加派对，你更愿意在家研究一道复杂的菜谱。'},
+  {id:17, dim:'ei', dir:'I', text:'你经常被人评价为"高冷"或"慢热"，但其实你只是还没热身。'},
+  {id:18, dim:'ei', dir:'I', text:'如果可以选，你宁愿花一整天时间整理自己的收藏/爱好，也不愿去逛街。'},
+  {id:19, dim:'ei', dir:'I', text:'你在社交媒体上很活跃，但在现实中却是个沉默寡言的人。'},
+  {id:20, dim:'ei', dir:'I', text:'你很难理解那些"为了社交而社交"的行为。'},
+  {id:21, dim:'ei', dir:'I', text:'即使是去喜欢的演唱会，结束后你也需要半天时间安静回血。'},
+  {id:22, dim:'ei', dir:'I', text:'你更喜欢"接收"信息，而不是"发射"信息。'},
+  {id:23, dim:'ei', dir:'I', text:'你经常会沉浸在自己的白日梦或幻想世界里。'},
+  {id:24, dim:'ei', dir:'I', text:'你觉得"独处"不是孤独，而是一种享受。'},
+  {id:25, dim:'ei', dir:'I', text:'面对冲突，你的第一反应是回避，而不是当场对峙。'},
+  {id:26, dim:'ei', dir:'I', text:'你更喜欢通过文字来表达那些细腻的情感，因为语言往往词不达意。'},
+  {id:27, dim:'ei', dir:'I', text:'你会在心里默默吐槽聚会上无聊的话题，但脸上保持着礼貌的微笑。'},
+  {id:28, dim:'ei', dir:'I', text:'比起大型游乐园，你更喜欢去安静的博物馆或美术馆。'},
+  {id:29, dim:'ei', dir:'I', text:'你认为"社交牛逼症"是一种消耗巨大的技能。'},
+  {id:30, dim:'ei', dir:'I', text:'如果没有回消息，大概率是因为你正在"自闭"充电。'},
+
+  // ===== S/N 维度 (31-60) =====
+  // 高分=倾向S，反向=N
+  {id:31, dim:'sn', dir:'S', text:'买电子产品时，你只看参数配置和具体功能，不看"未来感"这种虚词。'},
+  {id:32, dim:'sn', dir:'S', text:'你无法理解为什么有人能对着一朵云发呆十分钟并产生哲学思考。'},
+  {id:33, dim:'sn', dir:'S', text:'朋友给你讲道理时喜欢引用名言警句，你会觉得"说人话，到底怎么办"。'},
+  {id:34, dim:'sn', dir:'S', text:'你更相信眼见为实，对于那些玄乎的"第六感"持怀疑态度。'},
+  {id:35, dim:'sn', dir:'S', text:'做饭时必须严格按食谱的克数来，不然就会焦虑失败。'},
+  {id:36, dim:'sn', dir:'S', text:'你不太喜欢抽象画，因为你不知道它到底想表达什么。'},
+  {id:37, dim:'sn', dir:'S', text:'回忆过去时，你记得的是具体的日期、地点、对话内容，而不是模糊的感觉。'},
+  {id:38, dim:'sn', dir:'S', text:'你觉得"活在当下"比"规划未来"更重要。'},
+  {id:39, dim:'sn', dir:'S', text:'购买家具时，你优先考虑是否耐用、舒服，而不是设计感。'},
+  {id:40, dim:'sn', dir:'S', text:'你很难理解科幻小说里的平行宇宙设定。'},
+  {id:41, dim:'sn', dir:'S', text:'当别人说"我觉得我们上辈子见过"，你会翻个白眼心想"怎么可能"。'},
+  {id:42, dim:'sn', dir:'S', text:'你更喜欢纪录片（真实事件）胜过奇幻电影（魔法世界）。'},
+  {id:43, dim:'sn', dir:'S', text:'你做事喜欢列出具体的步骤清单（To-Do List），一步一步打钩。'},
+  {id:44, dim:'sn', dir:'S', text:'你讨厌那种模棱两可的答案，比如"大概也许可能"。'},
+  {id:45, dim:'sn', dir:'S', text:'你很难举一反三，更喜欢手把手教具体的操作方法。'},
+  {id:46, dim:'sn', dir:'S', text:'你关注细节到了强迫症的地步，比如桌子的对齐、标签的朝向。'},
+  {id:47, dim:'sn', dir:'S', text:'你买东西更看重性价比和实用性，而不是品牌故事。'},
+  {id:48, dim:'sn', dir:'S', text:'你觉得"象征意义"很虚无，送礼物送实际能用到的才最好。'},
+  {id:49, dim:'sn', dir:'S', text:'你很难记住梦境，就算记得也是零碎的画面，没有剧情。'},
+  {id:50, dim:'sn', dir:'S', text:'你更喜欢现实主义题材的小说。'},
+  {id:51, dim:'sn', dir:'S', text:'如果迷路了，你会看地图导航，而不是凭直觉随便走。'},
+  {id:52, dim:'sn', dir:'S', text:'你很难理解为什么有人会因为一首纯音乐而流泪。'},
+  {id:53, dim:'sn', dir:'S', text:'你更喜欢具体的夸奖（如"你这件衣服真好看"）而非笼统的（"你人真好"）。'},
+  {id:54, dim:'sn', dir:'S', text:'你对新科技的态度是：等大家都用上了我再学，不急着当小白鼠。'},
+  {id:55, dim:'sn', dir:'S', text:'你很难想象五年后的自己会在哪里做什么。'},
+  {id:56, dim:'sn', dir:'S', text:'你更喜欢玩模拟经营类游戏（种田、建房子）而不是角色扮演类（剧情流）。'},
+  {id:57, dim:'sn', dir:'S', text:'你觉得星座运势都是骗人的。'},
+  {id:58, dim:'sn', dir:'S', text:'你很难get到那些冷幽默或双关梗，往往需要别人解释。'},
+  {id:59, dim:'sn', dir:'S', text:'你更关心"这东西坏了怎么修"，而不是"这东西代表着什么品味"。'},
+  {id:60, dim:'sn', dir:'S', text:'你认为脚踏实地比仰望星空更能解决温饱问题。'},
+
+  // ===== T/F 维度 (61-90) =====
+  // 高分=倾向T，反向=F
+  {id:61, dim:'tf', dir:'T', text:'朋友哭诉遭遇渣男时，你第一反应是帮她分析哪里做得不对，而不是陪她一起骂。'},
+  {id:62, dim:'tf', dir:'T', text:'你觉得"对事不对人"是人际交往的最高准则。'},
+  {id:63, dim:'tf', dir:'T', text:'你在争论时，更在乎逻辑是否严密，哪怕因此伤了对方的感情。'},
+  {id:64, dim:'tf', dir:'T', text:'你很难理解为什么有人会因为一部烂片而感动落泪。'},
+  {id:65, dim:'tf', dir:'T', text:'做决定时，你会列一张表，左边写优点，右边写缺点，最后看哪边长。'},
+  {id:66, dim:'tf', dir:'T', text:'你觉得"善意的谎言"有时候比残酷的真相更虚伪。'},
+  {id:67, dim:'tf', dir:'T', text:'你不喜欢那种"大家都开心就好"的和谐氛围，如果有问题一定要指出来。'},
+  {id:68, dim:'tf', dir:'T', text:'你认为规则就是规则，不应该因为特殊情况就随意通融。'},
+  {id:69, dim:'tf', dir:'T', text:'你很难因为同情而原谅一个人的错误。'},
+  {id:70, dim:'tf', dir:'T', text:'你在评价一部电影时，更关注导演手法和剪辑，而不是演员演得好不好哭。'},
+  {id:71, dim:'tf', dir:'T', text:'如果朋友犯了错，你会直接指出，哪怕场面会变得尴尬。'},
+  {id:72, dim:'tf', dir:'T', text:'你觉得"情商高"有时候等同于"虚伪"。'},
+  {id:73, dim:'tf', dir:'T', text:'你很少会因为广告里的温情故事而冲动消费。'},
+  {id:74, dim:'tf', dir:'T', text:'在游戏中，你更倾向于选择最强力的角色，而不是最好看的皮肤。'},
+  {id:75, dim:'tf', dir:'T', text:'你觉得法律应该绝对公正，不应该掺杂个人情感。'},
+  {id:76, dim:'tf', dir:'T', text:'你很难理解那些为了爱情放弃事业的人。'},
+  {id:77, dim:'tf', dir:'T', text:'你更喜欢阅读科普读物，而不是心灵鸡汤。'},
+  {id:78, dim:'tf', dir:'T', text:'当你做错事，你更希望对方直接批评你，而不是委婉地暗示。'},
+  {id:79, dim:'tf', dir:'T', text:'你认为效率比氛围更重要。'},
+  {id:80, dim:'tf', dir:'T', text:'你很难在别人面前展示脆弱的一面，因为那看起来很不理性。'},
+  {id:81, dim:'tf', dir:'T', text:'如果必须在"诚实"和"友善"中选一个，你通常会选诚实。'},
+  {id:82, dim:'tf', dir:'T', text:'你觉得宠物只是动物，不需要赋予它们太多拟人化的情感。'},
+  {id:83, dim:'tf', dir:'T', text:'你很难因为别人的遭遇而产生强烈的共情（虽然你会表示理解）。'},
+  {id:84, dim:'tf', dir:'T', text:'你在二手交易时，会为了几块钱跟买家砍价到底。'},
+  {id:85, dim:'tf', dir:'T', text:'你觉得"大家都是成年人了，要对自己负责"，不需要过度照顾别人的玻璃心。'},
+  {id:86, dim:'tf', dir:'T', text:'你更相信数据和证据，而不是个人的证词。'},
+  {id:87, dim:'tf', dir:'T', text:'你觉得"爱"是需要建立在共同价值观和逻辑基础上的，不仅仅是感觉。'},
+  {id:88, dim:'tf', dir:'T', text:'你很难因为朋友的请求而打破自己的原则。'},
+  {id:89, dim:'tf', dir:'T', text:'你认为在公共场合大声喧哗的人，无论有什么理由都是错的。'},
+  {id:90, dim:'tf', dir:'T', text:'你更喜欢玩策略类游戏，通过算计击败对手让你很有成就感。'},
+
+  // ===== J/P 维度 (91-120) =====
+  // 高分=倾向J，反向=P
+  {id:91, dim:'jp', dir:'J', text:'出门旅游前，你会提前一个月订好酒店、机票，并规划好每天的行程表。'},
+  {id:92, dim:'jp', dir:'J', text:'你的桌面如果不收拾整齐，你就无法开始工作或学习。'},
+  {id:93, dim:'jp', dir:'J', text:'你非常讨厌别人迟到，哪怕是五分钟。'},
+  {id:94, dim:'jp', dir:'J', text:'你更喜欢按部就班的生活，突如其来的变动会让你抓狂。'},
+  {id:95, dim:'jp', dir:'J', text:'你在网购时，如果不看评论区几百条好评，你是绝不敢下单的。'},
+  {id:96, dim:'jp', dir:'J', text:'你的人生有明确的五年规划或十年目标。'},
+  {id:97, dim:'jp', dir:'J', text:'你的衣柜里的衣服是按季节、颜色或类型分类整理的。'},
+  {id:98, dim:'jp', dir:'J', text:'你很难忍受家里有杂物，定期会进行断舍离。'},
+  {id:99, dim:'jp', dir:'J', text:'如果任务deadline是一周后，你会在第一天就把它做完，而不是拖到最后。'},
+  {id:100, dim:'jp', dir:'J', text:'你更喜欢确定性，比如"今晚吃火锅"，而不是"到时候再看"。'},
+  {id:101, dim:'jp', dir:'J', text:'你觉得"船到桥头自然直"是非常不负责任的态度。'},
+  {id:102, dim:'jp', dir:'J', text:'你的浏览器书签都是分类整理好的，桌面图标也排列得整整齐齐。'},
+  {id:103, dim:'jp', dir:'J', text:'你很难容忍别人不遵守交通规则或插队。'},
+  {id:104, dim:'jp', dir:'J', text:'你更喜欢结局圆满的故事，讨厌开放式结局。'},
+  {id:105, dim:'jp', dir:'J', text:'你在超市购物时，会严格按照购物清单买，不会乱拿。'},
+  {id:106, dim:'jp', dir:'J', text:'你很难理解那种"说走就走的旅行"，觉得那是不成熟的表现。'},
+  {id:107, dim:'jp', dir:'J', text:'你习惯早睡早起，保持规律的作息。'},
+  {id:108, dim:'jp', dir:'J', text:'你收到快递后会立刻把包装盒、泡沫纸清理掉，保持环境整洁。'},
+  {id:109, dim:'jp', dir:'J', text:'你更喜欢看那种有明确攻略的游戏，不喜欢瞎摸索。'},
+  {id:110, dim:'jp', dir:'J', text:'如果计划被打乱，你会花很多时间去重新制定Plan B。'},
+  {id:111, dim:'jp', dir:'J', text:'你觉得"随缘"其实就是"懒得争取"的借口。'},
+  {id:112, dim:'jp', dir:'J', text:'你的冰箱里的食物都有标签和保质期记录。'},
+  {id:113, dim:'jp', dir:'J', text:'你很难接受在截止日期前才匆忙完成任务的压力。'},
+  {id:114, dim:'jp', dir:'J', text:'你喜欢把事情提前安排好，留出缓冲时间以防万一。'},
+  {id:115, dim:'jp', dir:'J', text:'你觉得"差不多就行"是一种很糟糕的态度。'},
+  {id:116, dim:'jp', dir:'J', text:'你更喜欢看那种有目录、有条理的说明文。'},
+  {id:117, dim:'jp', dir:'J', text:'你在拼乐高或做手工时，必须严格按说明书顺序来，不能跳步。'},
+  {id:118, dim:'jp', dir:'J', text:'你很难忍受别人把你的东西弄乱而不归位。'},
+  {id:119, dim:'jp', dir:'J', text:'你更喜欢把日程写在日历或本子上，而不是记在脑子里。'},
+  {id:120, dim:'jp', dir:'J', text:'你觉得生活需要掌控感，失控会让你极度焦虑。'},
+];
+
+// ============================================================
+//  MBTI TYPE DESCRIPTIONS
+// ============================================================
+const TYPE_DATA = {
+  'INTJ': { name:'建筑师', desc:'独立、战略性思维，拥有改善世界的强烈动力。在混乱中能看见秩序，在可能中能看见路径。沉默是蓄力，独处是燃料。', traits:['战略眼光','理性独立','完美主义','内敛高效','直言不讳','长期规划'] },
+  'INTP': { name:'逻辑学家', desc:'对理论和抽象思维充满热情，喜欢用逻辑解构一切，包括自己。睡前可能在推导数学定理，也可能在质疑宇宙存在。', traits:['逻辑分析','好奇求知','创新思维','独立思考','不拘一格','专注深研'] },
+  'ENTJ': { name:'指挥官', desc:'天生的领导者，对低效和混乱过敏。你总是先想到5步以后的事，而别人还在讨论要不要走第一步。', traits:['决断果敢','战略领导','高效执行','目标驱动','逻辑严密','直接坦率'] },
+  'ENTP': { name:'辩论家', desc:'喜欢挑战，讨厌停滞。智识上的格斗是你的娱乐，为了辩而辩是你的日常。规则在你眼里都是"现在暂时运作的假设"。', traits:['思维活跃','语言犀利','挑战权威','创意无限','灵活变通','享受辩论'] },
+  'INFJ': { name:'提倡者', desc:'稀有的理想主义者。你能看穿表象，抵达人心深处。有时候独自坐着，却能感受到整个人类的悲喜。', traits:['深刻洞察','理想主义','同理心强','独立思考','坚守原则','神秘内敛'] },
+  'INFP': { name:'调停者', desc:'内心住着一个宏大的故事世界。你把情感体验得比任何人都深，却很少全部说出口。创造力是你的本能，共情是你的超能力。', traits:['创意丰富','感情细腻','价值驱动','理想主义','共情强烈','自我探索'] },
+  'ENFJ': { name:'主人公', desc:'天然的磁场，让人感到被看见。你在乎每一个人的成长，有时候照顾别人比照顾自己更自然。', traits:['感召力强','关怀他人','组织协调','价值导向','沟通出色','影响力大'] },
+  'ENFP': { name:'竞选者', desc:'人生是一场充满可能性的冒险。你会为陌生人感动，会为一个想法熬夜，对世界永远保持孩子气的好奇。', traits:['热情活力','创意迸发','善于共情','乐观开放','自由随性','连接他人'] },
+  'ISTJ': { name:'物流师', desc:'可靠到像一座桥。你不说废话，但做到一切。历史和经验是你的导航系统，责任感是你最稳固的驱动力。', traits:['严格自律','注重细节','责任可靠','尊重传统','系统思维','沉稳低调'] },
+  'ISFJ': { name:'守卫者', desc:'安静地撑起周围人的世界。你记得每一个朋友的喜好，在需要的时候默默出现。温柔是你的力量，不是软弱。', traits:['体贴入微','忠诚可靠','务实低调','记忆力强','乐于助人','责任感强'] },
+  'ESTJ': { name:'总经理', desc:'秩序和标准的守护者。在混乱的世界里，你能迅速建立规则并让其运转。效率是美德，计划是安全感。', traits:['组织能力强','果断执行','注重规范','直接高效','责任担当','实际务实'] },
+  'ESFJ': { name:'执政官', desc:'团队的黏合剂。你天然关注每个人是否舒适，喜欢让事情有条不紊地运转，让所有人都感受到被照顾。', traits:['人际和谐','周到体贴','守护传统','组织协调','情感敏锐','积极热心'] },
+  'ISTP': { name:'鉴赏家', desc:'低调的实用主义者。你喜欢拆解东西——机器、系统、人类行为。保持选项开放是你的哲学，行动本身就是答案。', traits:['实践能力强','冷静观察','独立自主','灵活变通','技术导向','逻辑务实'] },
+  'ISFP': { name:'探险家', desc:'安静地活在感官里。美丽、音乐、自然、味道——你对这一切都有细腻的雷达。不爱争，但有自己坚守的柔软。', traits:['艺术感性','温和善良','活在当下','自由精神','真实纯粹','审美独到'] },
+  'ESTP': { name:'企业家', desc:'行动派，先做再说。你在混乱中如鱼得水，应激反应出奇地好。不喜欢理论，喜欢把手放进去感受到实物。', traits:['行动迅速','魅力十足','观察力强','适应性强','直接实际','享受挑战'] },
+  'ESFP': { name:'表演者', desc:'生活对你来说是个舞台，而你从来不会浪费它。笑声、美食、朋友——你把当下发挥到极致。快乐是你的使命感。', traits:['热情开朗','享受当下','社交达人','乐观感染','自发随性','充满活力'] },
+};
+
+// ============================================================
+//  STATE
+// ============================================================
+const answers = {};
+
+// ============================================================
+//  RENDER QUESTIONS
+// ============================================================
+const SECTIONS = [
+  { id:'s1', icon:'🔴', title:'第一部分：能量补给', sub:'E/I 维度 · 社交、独处、信息输入', dim:'ei', start:1, end:30 },
+  { id:'s2', icon:'🟡', title:'第二部分：感知滤镜', sub:'S/N 维度 · 购物、回忆、想象力、细节', dim:'sn', start:31, end:60 },
+  { id:'s3', icon:'🔵', title:'第三部分：决策心法', sub:'T/F 维度 · 吵架、送礼、评价他人', dim:'tf', start:61, end:90 },
+  { id:'s4', icon:'🟢', title:'第四部分：生活秩序', sub:'J/P 维度 · 计划、拖延、突发状况', dim:'jp', start:91, end:120 },
+];
+
+const LABELS = { 1:'极不符合', 2:'不太符合', 3:'中立', 4:'比较符合', 5:'非常符合' };
+
+function buildQuestions() {
+  const container = document.getElementById('questions-container');
+  SECTIONS.forEach(sec => {
+    const secDiv = document.createElement('div');
+    secDiv.className = 'section';
+    secDiv.innerHTML = `
+      <div class="section-header">
+        <span class="section-icon">${sec.icon}</span>
+        <div>
+          <div class="section-title">${sec.title}</div>
+          <div class="section-sub">${sec.sub}</div>
+        </div>
+      </div>`;
+    const sectionQs = QUESTIONS.filter(q => q.id >= sec.start && q.id <= sec.end);
+    sectionQs.forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      card.id = `q-card-${q.id}`;
+      card.innerHTML = `
+        <div class="q-meta">
+          <span class="q-num">${q.id}.</span>
+          <span class="q-dim dim-${q.dim}">${q.dim.toUpperCase()}</span>
+        </div>
+        <div class="q-text">${q.text}</div>
+        <div class="scale" id="scale-${q.id}">
+          ${[1,2,3,4,5].map(v=>`
+            <button class="scale-btn" data-qid="${q.id}" data-v="${v}" onclick="selectAnswer(${q.id},${v})">
+              <span class="scale-num">${v}</span>
+              <span class="scale-label">${LABELS[v]}</span>
+            </button>
+          `).join('')}
+        </div>`;
+      secDiv.appendChild(card);
+    });
+    container.appendChild(secDiv);
+  });
+}
+
+function selectAnswer(qid, val) {
+  const wasAnswered = answers[qid] !== undefined;
+  answers[qid] = val;
+
+  const scale = document.getElementById(`scale-${qid}`);
+  scale.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.v) === val);
+  });
+
+  const card = document.getElementById(`q-card-${qid}`);
+  card.classList.add('answered');
+
+  if (!wasAnswered) updateProgress();
+}
+
+function updateProgress() {
+  const n = Object.keys(answers).length;
+  const pct = Math.round(n / 120 * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = `已答 ${n} / 120 题`;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('answered-count').textContent = n;
+  document.getElementById('btn-submit').disabled = n < 120;
+}
+
+// ============================================================
+//  SCORING
+// ============================================================
+function calcScores() {
+  // Each dimension: 30 questions, each 1-5
+  // Raw sum range: 30-150
+  // Higher score = first letter (I, S, T, J)
+  const sums = { ei: 0, sn: 0, tf: 0, jp: 0 };
+  QUESTIONS.forEach(q => {
+    sums[q.dim] += (answers[q.id] || 3);
+  });
+
+  // Convert to 0-100 scale, >75 means first letter strongly
+  const toPercent = raw => Math.round((raw - 30) / 120 * 100);
+  const pct = {
+    ei: toPercent(sums.ei), // >50 = I, <50 = E
+    sn: toPercent(sums.sn), // >50 = S, <50 = N
+    tf: toPercent(sums.tf), // >50 = T, <50 = F
+    jp: toPercent(sums.jp), // >50 = J, <50 = P
+  };
+
+  const type =
+    (pct.ei >= 50 ? 'I' : 'E') +
+    (pct.sn >= 50 ? 'S' : 'N') +
+    (pct.tf >= 50 ? 'T' : 'F') +
+    (pct.jp >= 50 ? 'J' : 'P');
+
+  return { type, pct };
+}
+
+// ============================================================
+//  SUBMIT
+// ============================================================
+function submitQuiz() {
+  const { type, pct } = calcScores();
+  const info = TYPE_DATA[type] || { name:'独特人格', desc:'你的组合很罕见，无法用单一标签定义你。', traits:['独特','多元','复杂'] };
+
+  document.getElementById('quiz-page').style.display = 'none';
+  const rp = document.getElementById('result-page');
+  rp.style.display = 'block';
+  window.scrollTo(0, 0);
+
+  document.getElementById('result-type-text').textContent = type;
+  document.getElementById('result-name-text').textContent = `${type} · ${info.name}`;
+  document.getElementById('result-desc-text').textContent = info.desc;
+
+  // Dimension bars
+  const dimInfo = [
+    { dim:'ei', leftLabel:'I 内向', rightLabel:'E 外向', fill: pct.ei, fillColor:'#4f46e5', letter: pct.ei >= 50 ? 'I' : 'E' },
+    { dim:'sn', leftLabel:'S 实感', rightLabel:'N 直觉', fill: pct.sn, fillColor:'#d97706', letter: pct.sn >= 50 ? 'S' : 'N' },
+    { dim:'tf', leftLabel:'T 思考', rightLabel:'F 情感', fill: pct.tf, fillColor:'#0891b2', letter: pct.tf >= 50 ? 'T' : 'F' },
+    { dim:'jp', leftLabel:'J 判断', rightLabel:'P 感知', fill: pct.jp, fillColor:'#16a34a', letter: pct.jp >= 50 ? 'J' : 'P' },
+  ];
+
+  const barsEl = document.getElementById('dim-bars');
+  barsEl.innerHTML = '';
+  dimInfo.forEach(d => {
+    const score = d.fill; // 0-100, >50 means left (first) letter
+    const leftPct = score;
+    const card = document.createElement('div');
+    card.className = 'dim-bar-card';
+    card.innerHTML = `
+      <div class="dim-bar-top">
+        <span class="dim-bar-left">${d.leftLabel}</span>
+        <span class="dim-bar-pct">${score >= 50 ? d.leftLabel.split(' ')[0] : d.rightLabel.split(' ')[0]} ${score >= 50 ? score : 100-score}%</span>
+        <span class="dim-bar-right">${d.rightLabel}</span>
+      </div>
+      <div class="dim-track">
+        <div class="dim-fill" id="fill-${d.dim}" style="width:0%;background:${d.fillColor}"></div>
+        <div class="dim-mid"></div>
+      </div>`;
+    barsEl.appendChild(card);
+    setTimeout(() => {
+      document.getElementById(`fill-${d.dim}`).style.width = leftPct + '%';
+    }, 100);
+  });
+
+  // Traits
+  const traitsEl = document.getElementById('traits-grid');
+  traitsEl.innerHTML = '';
+  info.traits.forEach(t => {
+    const tag = document.createElement('span');
+    tag.className = 'trait-tag';
+    tag.textContent = t;
+    traitsEl.appendChild(tag);
+  });
+
+  // Detail
+  const detailLines = [
+    `能量来源：${pct.ei >= 50 ? `偏向内向（I ${pct.ei}%）— 独处是你的充电站，社交消耗大量能量` : `偏向外向（E ${100-pct.ei}%）— 人群和互动是你的能量来源`}`,
+    `感知方式：${pct.sn >= 50 ? `偏向实感（S ${pct.sn}%）— 你相信可以触碰、验证的事物，脚踏实地` : `偏向直觉（N ${100-pct.sn}%）— 你更在意模式、象征和未来的可能性`}`,
+    `决策风格：${pct.tf >= 50 ? `偏向思考（T ${pct.tf}%）— 你用逻辑和客观标准做决定，情感不是主要变量` : `偏向情感（F ${100-pct.tf}%）— 人的感受和价值观在你的决策中举足轻重`}`,
+    `生活态度：${pct.jp >= 50 ? `偏向判断（J ${pct.jp}%）— 你渴望确定性和计划，秩序让你感到安全` : `偏向感知（P ${100-pct.jp}%）— 你偏好开放选项，对突发变化有更强的适应性`}`,
+  ];
+  document.getElementById('detail-content').innerHTML = detailLines.map(l=>`<p style="margin-bottom:10px;">${l}</p>`).join('');
+
+  // Save result to URL hash for sharing
+  const resultStr = btoa(JSON.stringify({ type, pct }));
+  window.location.hash = 'result=' + resultStr;
+}
+
+// ============================================================
+//  SHARE
+// ============================================================
+function openShare() {
+  const modal = document.getElementById('share-modal');
+  const baseUrl = window.location.href.split('#')[0];
+  const shareUrl = baseUrl;
+  document.getElementById('share-url-text').textContent = shareUrl;
+  modal.classList.add('open');
+}
+function closeShare() { document.getElementById('share-modal').classList.remove('open'); }
+function copyUrl() {
+  const url = document.getElementById('share-url-text').textContent;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => showToast('链接已复制，快去分享给朋友！'));
+  } else {
+    const el = document.createElement('textarea');
+    el.value = url;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('链接已复制！');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+//  RETAKE
+// ============================================================
+function retakeQuiz() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.scale-btn.active').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.q-card.answered').forEach(c => c.classList.remove('answered'));
+  document.getElementById('result-page').style.display = 'none';
+  document.getElementById('quiz-page').style.display = 'block';
+  window.location.hash = '';
+  updateProgress();
+  window.scrollTo(0, 0);
+}
+
+// ============================================================
+//  SCROLL TO TOP BUTTON
+// ============================================================
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('back-top');
+  btn.classList.toggle('show', window.scrollY > 400);
+});
+
+// ============================================================
+//  INIT
+// ============================================================
+buildQuestions();
+updateProgress();
+</script>
+</body>
+</html>
