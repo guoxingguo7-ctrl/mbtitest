@@ -1,100 +1,128 @@
-/* DimBars.module.css */
-/* 维度得分条 —— 轨道式 + 发光 */
+/* DimBars.module.css — Post-Modern Pop-Retro Game UI */
 
 .wrapper {
   margin-bottom: 2rem;
 }
 
 .heading {
-  font-size: 0.92rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--text-primary);
   margin-bottom: 1rem;
+  border-bottom: var(--grid-border-w) solid var(--game-border);
+  padding-bottom: 0.5rem;
 }
 
 .barList {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
-/* 单行 */
+/* Each dimension row */
 .row {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  border: 1.5px solid var(--game-border);
+  background: var(--game-bg-slot);
+  box-shadow: var(--game-inset);
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-/* 标签行：左标签 / 百分比 / 右标签 */
+.row:hover {
+  border-color: var(--game-border-light);
+}
+
+/* Label row: left label / pct / right label */
 .labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.72rem;
+  align-items: center;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.labelLeft {
+  color: var(--text-secondary);
+}
+
+.labelRight {
   color: var(--text-muted);
-  letter-spacing: 0.04em;
 }
 
 .pctLeft,
 .pctRight {
   font-variant-numeric: tabular-nums;
-  font-weight: 600;
+  font-weight: 700;
   min-width: 2.5rem;
 }
 
 .pctLeft {
-  color: var(--text-primary);
+  color: var(--pop-cyan);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
 }
 
-/* 轨道 */
+.pctRight {
+  color: var(--text-secondary);
+}
+
+/* Track (game HP-bar style) */
 .track {
   position: relative;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 3px;
+  height: 8px;
+  background: var(--space-deep);
+  border: 1px solid var(--game-border);
+  border-radius: 0;
   overflow: hidden;
+  box-shadow: var(--game-inset);
 }
 
-/* 填充段 —— 左侧 */
+/* Fill bars */
 .fillLeft {
   position: absolute;
   left: 0;
   top: 0;
   height: 100%;
-  border-radius: 3px 0 0 3px;
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  width: 0%; /* 初始状态，将通过style属性设置 */
+  border-radius: 0;
+  transition: width 0.8s var(--ease-out);
+  width: 0%; /* initial, overridden by inline style */
 }
 
-/* 填充段 —— 右侧 */
 .fillRight {
   position: absolute;
   right: 0;
   top: 0;
   height: 100%;
-  border-radius: 0 3px 3px 0;
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  width: 0%;
+  border-radius: 0;
+  transition: width 0.8s var(--ease-out);
+  width: 0%; /* initial, overridden by inline style */
 }
 
-/* 中点标记 */
+/* Mid dot */
 .midDot {
   position: absolute;
-  top: 50%;
+  top: -2px;
   left: 50%;
-  width: 4px;
-  height: 4px;
-  background: var(--text-muted);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.4;
+  width: 3px;
+  height: 12px;
+  background: var(--game-border-light);
+  transform: translateX(-50%);
+  border-radius: 0;
 }
 
-/* 响应式 */
+/* ── Responsive ── */
 @media (max-width: 640px) {
   .labels {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
   }
   .track {
-    height: 5px;
+    height: 6px;
   }
 }

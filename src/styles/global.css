@@ -1,4 +1,4 @@
-/* ===== Global Reset & Base Styles ===== */
+/* ===== Global Reset & Base — Post-Modern Pop-Retro Game UI ===== */
 
 @import './tokens.css';
 
@@ -16,95 +16,145 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+  /* Scanlines overlay on entire page (retro CRT) */
+  background: var(--space-deep);
 }
 
 body {
   font-family: var(--font-sans);
   background: var(--space-deep);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.65;
   min-height: 100vh;
   overflow-x: hidden;
+  position: relative;
 }
 
-/* ── Cosmic Background (CSS-only animated stars) ── */
+/* ── CRT Scanlines Overlay (retro) ── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(56, 189, 248, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 70% 100%, rgba(167, 139, 250, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 30% 40%, rgba(45, 212, 191, 0.03) 0%, transparent 50%),
-    var(--space-deep);
-  z-index: var(--z-canvas);
+  z-index: var(--z-scanline);
   pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.06) 2px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+  opacity: 0.5;
+}
+
+/* ── Halftone Dot Pattern Overlay (pop art — Ben-Day dots) ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-dots);
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: radial-gradient(circle, var(--text-muted) 0.7px, transparent 0.7px);
+  background-size: 8px 8px;
+}
+
+/* ── Noise / Grain Texture (retro film grain) ── */
+@keyframes noiseShift {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-2%, -1%); }
+  20%  { transform: translate(1%, 2%); }
+  30%  { transform: translate(-1%, 1%); }
+  40%  { transform: translate(2%, -2%); }
+  50%  { transform: translate(-1%, 2%); }
+  60%  { transform: translate(1%, -1%); }
+  70%  { transform: translate(-2%, 1%); }
+  80%  { transform: translate(2%, 2%); }
+  90%  { transform: translate(-1%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: -200%;
+  width: 400%;
+  height: 400%;
+  z-index: var(--z-scanline);
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  animation: noiseShift 0.4s steps(4) infinite;
 }
 
 /* ── Typography ── */
 h1, h2, h3, h4 {
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  letter-spacing: 0.04em;
 }
 
 h2 {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  letter-spacing: 0.03em;
 }
 
 h3 {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  letter-spacing: 0.02em;
 }
 
 p {
   color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.75;
 }
 
 a {
-  color: var(--color-ei);
+  color: var(--pop-cyan);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease-out);
+  border-bottom: 1px solid transparent;
 }
-
 a:hover {
-  color: var(--color-sn);
+  color: var(--pop-magenta);
+  border-bottom-color: var(--pop-magenta);
 }
 
-/* ── Selection ── */
+/* ── Selection (pop-art cyan highlight) ── */
 ::selection {
-  background: rgba(56, 189, 248, 0.3);
-  color: white;
+  background: rgba(0, 229, 255, 0.35);
+  color: var(--pop-white);
 }
 
-/* ── Scrollbar ── */
+/* ── Scrollbar (game UI style) ── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
-
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--space-deep);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-full);
+  background: var(--game-border);
+  border-radius: 0;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--game-border-light);
 }
 
-/* ── Focus ── */
+/* ── Focus (thick pop-art outline) ── */
 :focus-visible {
-  outline: 2px solid var(--color-ei);
+  outline: 3px solid var(--pop-cyan);
   outline-offset: 2px;
+  box-shadow: 0 0 0 1px var(--pop-black);
 }
 
 /* ── Utility: Screen Reader Only ── */
@@ -123,12 +173,40 @@ a:hover {
 /* ── Layout Helpers ── */
 .container {
   width: 100%;
-  max-width: 900px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 0 var(--space-lg);
 }
 
-/* ── Fade-in for route transitions ── */
+/* ── Game Grid Helper (modular inventory grid) ── */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--grid-gap);
+}
+
+/* ── Pop Art Halftone Overlay Utility ── */
+.halftone-overlay {
+  position: relative;
+}
+.halftone-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: radial-gradient(circle, var(--pop-black) 0.8px, transparent 0.8px);
+  background-size: 10px 10px;
+  mix-blend-mode: multiply;
+}
+
+/* ── Comic-Book Inset Border (pop art) ── */
+.comic-border {
+  border: var(--grid-border-w) solid var(--pop-black);
+  box-shadow: var(--game-outset);
+}
+
+/* ── Page Fade-In ── */
 .page-enter {
   animation: pageEnter var(--duration-slow) var(--ease-out) both;
 }
@@ -136,10 +214,42 @@ a:hover {
 @keyframes pageEnter {
   from {
     opacity: 0;
-    transform: scale(0.98) translateY(8px);
+    transform: scale(0.97) translateY(12px);
   }
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+}
+
+/* ── Glitch Keyframes (post-modern) ── */
+@keyframes glitch1 {
+  0%, 100% { clip-path: inset(0 0 85% 0); transform: translate(-2px, 0); }
+  10%      { clip-path: inset(15% 0 60% 0); transform: translate(2px, 0); }
+  20%      { clip-path: inset(40% 0 30% 0); transform: translate(-1px, 0); }
+  30%      { clip-path: inset(60% 0 10% 0); transform: translate(1px, 0); }
+  40%      { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 0); }
+  50%      { clip-path: inset(30% 0 45% 0); transform: translate(2px, 0); }
+  60%      { clip-path: inset(55% 0 20% 0); transform: translate(-1px, 0); }
+  70%      { clip-path: inset(5% 0 80% 0); transform: translate(1px, 0); }
+  80%      { clip-path: inset(70% 0 5% 0); transform: translate(-2px, 0); }
+  90%      { clip-path: inset(20% 0 55% 0); transform: translate(2px, 0); }
+}
+
+@keyframes glitch2 {
+  0%, 100% { clip-path: inset(85% 0 0 0); transform: translate(2px, 0); }
+  10%      { clip-path: inset(0 0 15% 0); transform: translate(-2px, 0); }
+  20%      { clip-path: inset(30% 0 40% 0); transform: translate(1px, 0); }
+  30%      { clip-path: inset(10% 0 60% 0); transform: translate(-1px, 0); }
+  40%      { clip-path: inset(70% 0 10% 0); transform: translate(2px, 0); }
+  50%      { clip-path: inset(45% 0 30% 0); transform: translate(-2px, 0); }
+  60%      { clip-path: inset(20% 0 55% 0); transform: translate(1px, 0); }
+  70%      { clip-path: inset(80% 0 5% 0); transform: translate(-1px, 0); }
+  80%      { clip-path: inset(5% 0 70% 0); transform: translate(2px, 0); }
+  90%      { clip-path: inset(55% 0 20% 0); transform: translate(-2px, 0); }
+}
+
+@keyframes scanlineScroll {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
 }

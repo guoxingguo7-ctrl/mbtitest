@@ -1,12 +1,34 @@
-/* ===== HomePage: Inner Cosmos ===== */
+/* ===== HomePage: Post-Modern Pop-Retro Game Grid ===== */
 
 .home {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  /* Game grid background pattern */
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-/* ── Starfield Background (CSS-only) ── */
+/* ── Retro Scanline Overlay ── */
+.home::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scanline);
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0.04) 4px
+  );
+  opacity: 0.6;
+}
+
+/* ── Starfield (CSS-only) ── */
 .starfield {
   position: fixed;
   inset: 0;
@@ -18,274 +40,401 @@
   position: absolute;
   width: 2px;
   height: 2px;
-  background: white;
-  border-radius: 50%;
+  background: var(--pop-white);
+  border-radius: 0; /* pix el-style square stars */
   animation: twinkle var(--dur) ease-in-out infinite;
   animation-delay: var(--delay);
-  opacity: 0.3;
+  opacity: 0.5;
+  image-rendering: pixelated;
 }
 
-/* ── Floating Geometries ── */
-.geo {
-  position: fixed;
-  z-index: calc(var(--z-canvas) + 1);
-  pointer-events: none;
-  opacity: 0.15;
-}
-
-.geo::before {
-  content: '';
-  display: block;
-  width: var(--size);
-  height: var(--size);
-  border: 1px solid var(--color);
-  clip-path: var(--shape);
-  animation: floatGeo var(--dur) ease-in-out infinite;
-  animation-delay: var(--delay);
-}
-
-/* ── Content Layer ── */
-.content {
+/* ── Main Game Grid Container ── */
+.gridContainer {
   position: relative;
   z-index: var(--z-content);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: var(--space-4xl) var(--space-lg);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: var(--grid-gap);
+  grid-template-areas:
+    "hero    hero    hero    hero"
+    "subtitle subtitle subtitle subtitle"
+    "type-a  type-b  type-c  type-d"
+    "type-e  type-f  type-g  type-h"
+    "type-i  type-j  type-k  type-l"
+    "type-m  type-n  type-o  type-p"
+    "cta     cta     cta     cta"
+    "feat-a  feat-b  feat-c  feat-d"
+    "short   short   short   short"
+    "footer  footer  footer  footer";
+}
+
+/* ── Hero Block (span full width) ── */
+.heroBlock {
+  grid-area: hero;
+  position: relative;
+  padding: 32px 20px 20px;
+  border: var(--grid-border-w) solid var(--pop-black);
+  background: var(--space-deep);
+  box-shadow: var(--game-outset);
   text-align: center;
+  overflow: hidden;
 }
 
-/* ── Hero ── */
-.hero {
-  max-width: 720px;
-  margin-bottom: var(--space-4xl);
-}
-
-.heroSubtitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-md);
-  margin-bottom: var(--space-xl);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-.heroSubtitle span {
-  width: 24px;
-  height: 1px;
-  background: var(--glass-border);
+/* Halftone dot overlay on hero */
+.heroBlock::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: radial-gradient(circle, var(--pop-black) 0.8px, transparent 0.8px);
+  background-size: 10px 10px;
 }
 
 .heroTitle {
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-bottom: var(--space-lg);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: var(--pop-white);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  /* Glitchy pop-art shado w */
+  text-shadow:
+    3px 3px 0 var(--pop-cyan),
+    -1px -1px 0 var(--pop-magenta);
 }
 
-.heroTitleGradient {
-  background: linear-gradient(
-    135deg,
-    var(--color-ei) 0%,
-    var(--color-sn) 30%,
-    var(--color-tf) 60%,
-    var(--color-jp) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: textShimmer 4s linear infinite;
+.heroTitleAccent {
+  display: block;
+  background: none;
+  color: var(--pop-yellow);
+  /* Comic-book style stroke via text-shadow */
+  text-shadow:
+    2px 2px 0 var(--pop-black),
+    -1px -1px 0 var(--pop-black),
+    1px -1px 0 var(--pop-black),
+    -1px 1px 0 var(--pop-black);
 }
 
-.heroDesc {
-  font-size: 1.15rem;
-  color: var(--text-secondary);
-  max-width: 480px;
-  margin: 0 auto;
-  line-height: 1.8;
+.heroSubtitle {
+  grid-area: subtitle;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--game-border);
+  margin-bottom: 4px;
 }
 
-/* ── Type Constellation ── */
-.constellation {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-md) var(--space-lg);
-  max-width: 600px;
-  margin: 0 auto var(--space-4xl);
+/* ── Type Grid Modules (4x4 game inventory style) ── */
+.typeGrid {
+  display: contents; /* let children participate in parent grid */
 }
 
-.typeNode {
+.typeSlot {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: var(--space-sm);
-  border-radius: var(--radius-md);
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 4px;
+  border: var(--grid-border-w) solid var(--game-border);
+  background: var(--game-bg-slot);
+  box-shadow: var(--game-inset);
   cursor: default;
-  transition: all var(--duration-normal) var(--ease-out);
+  transition: all var(--duration-normal) var(--ease-pop);
+  overflow: hidden;
 }
 
-.typeNode:hover {
-  background: var(--glass-bg-hover);
-  transform: translateY(-2px);
+.typeSlot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  pointer-events: none;
 }
+
+.typeSlot:hover {
+  border-color: var(--game-border-light);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: var(--game-outset), 0 0 12px var(--slot-glow, rgba(0,229,255,0.2));
+}
+
+.typeSlot:hover::before {
+  opacity: 1;
+}
+
+/* Color each column by MBTI group */
+.typeSlot:nth-child(-n+4)  { --slot-glow: rgba(0,229,255,0.25); }
+.typeSlot:nth-child(n+5):nth-child(-n+8)  { --slot-glow: rgba(187,102,255,0.25); }
+.typeSlot:nth-child(n+9):nth-child(-n+12) { --slot-glow: rgba(0,255,204,0.25); }
+.typeSlot:nth-child(n+13)                { --slot-glow: rgba(255,230,0,0.25); }
 
 .typeCode {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
   color: var(--text-muted);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   transition: color var(--duration-fast);
+  z-index: 1;
 }
 
-.typeNode:hover .typeCode {
-  color: var(--text-primary);
+.typeSlot:hover .typeCode {
+  color: var(--pop-white);
 }
 
 .typeDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color);
-  opacity: 0.4;
+  width: 5px;
+  height: 5px;
+  border-radius: 0; /* square = pix el art */
+  background: var(--slot-color, var(--pop-cyan));
+  opacity: 0.35;
   transition: all var(--duration-normal) var(--ease-out);
+  z-index: 1;
 }
 
-.typeNode:hover .typeDot {
+.typeSlot:hover .typeDot {
   opacity: 1;
-  box-shadow: 0 0 8px var(--color);
+  box-shadow: 0 0 6px var(--slot-color, var(--pop-cyan));
 }
 
-/* ── Start Ring ── */
-.startRing {
-  position: relative;
-  display: inline-flex;
+/* ── CTA Block (Start Button) ── */
+.ctaBlock {
+  grid-area: cta;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-3xl);
+  padding: 28px 20px;
+  border: var(--grid-border-w) solid var(--pop-black);
+  background: var(--space-dark);
+  box-shadow: var(--game-outset);
+  position: relative;
+  overflow: hidden;
+  margin-top: 4px;
 }
 
-.startRingOuter {
+/* Pop-art diagonal stripe in CTA */
+.ctaBlock::before {
+  content: '';
   position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  animation: ringRotate 20s linear infinite;
-}
-
-.startRingInner {
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 1px dashed var(--glass-border);
-  animation: ringRotateReverse 15s linear infinite;
+  top: 0; left: -50%;
+  width: 200%; height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 12px,
+    rgba(255,230,0,0.03) 12px,
+    rgba(255,230,0,0.03) 24px
+  );
+  pointer-events: none;
 }
 
 .startBtn {
   position: relative;
-  z-index: 1;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  color: var(--text-primary);
-  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 48px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pop-black);
+  background: var(--pop-cyan);
+  border: var(--grid-border-w) solid var(--pop-black);
+  box-shadow: 4px 4px 0 var(--pop-black);
   cursor: pointer;
-  transition: all var(--duration-slow) var(--ease-out);
-  overflow: hidden;
+  transition: all var(--duration-normal) var(--ease-pop);
+  z-index: 1;
 }
 
 .startBtn:hover {
-  background: var(--glass-bg-active);
-  box-shadow: var(--glow-ei);
-  transform: scale(1.1);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--pop-black);
+  background: var(--pop-magenta);
+  color: var(--pop-white);
 }
 
-.startBtn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-  transform: skewX(-20deg);
-  transition: left 0.6s;
-}
-
-.startBtn:hover::after {
-  left: 200%;
+.startBtn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--pop-black);
 }
 
 .startHint {
-  margin-top: var(--space-lg);
-  font-size: 0.82rem;
+  margin-top: 12px;
+  font-size: 0.75rem;
   color: var(--text-muted);
-  animation: pulseGlow 3s ease-in-out infinite;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  z-index: 1;
 }
 
-/* ── Footer ── */
-.footer {
+/* ── Feature Blocks (2x2 subgrid) ── */
+.featBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px 14px;
+  border: var(--grid-border-w) solid var(--game-border);
+  background: var(--game-bg-slot);
+  box-shadow: var(--game-inset);
+  text-align: left;
+  cursor: default;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.featBlock:hover {
+  border-color: var(--game-border-bright);
+  transform: translateY(-2px);
+  box-shadow: var(--game-outset);
+}
+
+.featIcon {
+  font-size: 1.3rem;
+  line-height: 1;
+  /* Pop-art color cycling */
+  animation: featColorCycle 4s linear infinite;
+}
+
+@keyframes featColorCycle {
+  0%, 100% { color: var(--pop-cyan); }
+  25%      { color: var(--pop-magenta); }
+  50%      { color: var(--pop-yellow); }
+  75%      { color: var(--pop-teal); }
+}
+
+.featTitle {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.featDesc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Short Test Button ── */
+.shortBlock {
+  grid-area: short;
+  display: flex;
+  justify-content: center;
+  padding: 14px 0 4px;
+}
+
+.shortBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 28px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pop-yellow);
+  background: transparent;
+  border: 1.5px solid var(--pop-yellow);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.shortBtn::before {
+  content: '';
   position: absolute;
-  bottom: var(--space-xl);
-  left: 0;
-  right: 0;
+  inset: 0;
+  background: var(--pop-yellow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-slow) var(--ease-out);
+  z-index: 0;
+}
+
+.shortBtn:hover::before {
+  transform: scaleX(1);
+}
+
+.shortBtn:hover {
+  color: var(--pop-black);
+}
+
+.shortBtn > * {
+  z-index: 1;
+  position: relative;
+}
+
+/* ── Footer Block ── */
+.footerBlock {
+  grid-area: footer;
   text-align: center;
+  padding: 18px 0 8px;
+  border-top: 1px solid var(--game-border);
 }
 
 .footerText {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   opacity: 0.5;
+  letter-spacing: 0.04em;
 }
 
-/* ── Responsive ── */
-@media (max-width: 600px) {
-  .constellation {
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-sm);
-    max-width: 100%;
-  }
-
-  .typeCode {
-    font-size: 0.7rem;
+/* ── Responsive: stack to 2-col on mobile ── */
+@media (max-width: 640px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "hero    hero"
+      "subtitle subtitle"
+      "type-a  type-b"
+      "type-c  type-d"
+      "type-e  type-f"
+      "type-g  type-h"
+      "type-i  type-j"
+      "type-k  type-l"
+      "type-m  type-n"
+      "type-o  type-p"
+      "cta     cta"
+      "feat-a  feat-b"
+      "feat-c  feat-d"
+      "short   short"
+      "footer  footer";
+    gap: 6px;
+    padding: 12px 8px 60px;
   }
 
   .heroTitle {
-    font-size: clamp(2rem, 10vw, 3rem);
-  }
-
-  .startRingOuter {
-    width: 90px;
-    height: 90px;
-  }
-
-  .startRingInner {
-    width: 66px;
-    height: 66px;
+    font-size: clamp(1.6rem, 9vw, 2.8rem);
   }
 
   .startBtn {
-    width: 44px;
-    height: 44px;
-    font-size: 1rem;
+    padding: 12px 32px;
+    font-size: 0.95rem;
+  }
+
+  .typeCode {
+    font-size: 0.62rem;
   }
 }

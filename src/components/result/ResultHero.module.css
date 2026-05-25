@@ -1,100 +1,135 @@
-/* ResultHero.module.css */
-/* 结果英雄区 —— 发光核心 + 类型展示 */
+/* ResultHero.module.css — Post-Modern Pop-Retro Game UI */
 
 .hero {
   position: relative;
   text-align: center;
   padding: 2.5rem 1.5rem 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  border: var(--grid-border-w) solid var(--pop-black);
+  background: var(--space-deep);
+  box-shadow: var(--game-outset);
   overflow: hidden;
 }
 
-/* 发光背景环 */
+/* Halftone dot overlay */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: radial-gradient(circle, var(--pop-black) 0.8px, transparent 0.8px);
+  background-size: 12px 12px;
+}
+
+/* Glow ring */
 .glowRing {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 220px;
-  height: 220px;
+  width: 200px;
+  height: 200px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 204, 255, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0,229,255,0.10) 0%, transparent 70%);
   animation: pulseGlow 3s ease-in-out infinite;
   pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes pulseGlow {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50%      { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
 }
 
-/* 类型代码 */
+/* Type code display */
 .typeCode {
   position: relative;
-  font-size: 3.2rem;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 10vw, 5rem);
   font-weight: 900;
-  letter-spacing: 0.18em;
-  background: linear-gradient(135deg, var(--color-ei), var(--color-sn), var(--color-tf), var(--color-jp));
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmerText 4s ease-in-out infinite;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pop-white);
   margin-bottom: 0.5rem;
+  text-shadow:
+    3px 3px 0 var(--pop-cyan),
+    -1px -1px 0 var(--pop-magenta);
+  line-height: 1.05;
 }
 
-@keyframes shimmerText {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* 类型名称 */
+/* Type name */
 .typeName {
-  font-size: 1.2rem;
-  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
   color: var(--text-primary);
-  margin-bottom: 0.75rem;
-  letter-spacing: 0.06em;
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.04em;
 }
 
-/* 简短描述 */
+/* Description */
 .description {
+  position: relative;
+  z-index: 1;
   font-size: 0.88rem;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.85;
   max-width: 480px;
   margin: 0 auto;
 }
 
-/* 四维度小标签 */
+/* Four dimension tags */
 .dimTags {
   display: flex;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   margin-top: 1.25rem;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
 
 .dimTag {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  padding: 0.3rem 0.75rem;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--glass-border);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border: 1.5px solid var(--game-border);
+  background: var(--game-bg-slot);
+  color: var(--text-secondary);
+  box-shadow: var(--game-inset);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: default;
 }
 
-/* 响应式 */
+.dimTag:hover {
+  border-color: var(--pop-cyan);
+  color: var(--pop-cyan);
+  box-shadow: var(--game-inset), 0 0 8px rgba(0,229,255,0.15);
+}
+
+/* Responsive */
 @media (max-width: 640px) {
   .hero {
     padding: 2rem 1rem 1.5rem;
   }
   .typeCode {
-    font-size: 2.4rem;
+    font-size: clamp(2rem, 12vw, 3.2rem);
   }
   .typeName {
-    font-size: 1.05rem;
+    font-size: 1rem;
+  }
+  .dimTags {
+    gap: 0.35rem;
+  }
+  .dimTag {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
   }
 }
