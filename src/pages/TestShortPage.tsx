@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { QuizProvider, useQuiz } from '../context/QuizContext';
 import ThreeScene from '../components/test/ThreeScene';
 import QuestionCard from '../components/test/QuestionCard';
@@ -18,6 +19,7 @@ const BLOCK_SIZE = 10;
 
 function TestShortPageInner() {
   const { state, selectAnswer, submit, reset, questions } = useQuiz();
+  const navigate = useNavigate();
   const [showResult, setShowResult] = useState(false);
   const [analyses, setAnalyses] = useState<Record<string, string>>({});
   const [shareOpen, setShareOpen] = useState(false);
@@ -113,6 +115,17 @@ function TestShortPageInner() {
 
       {/* Content */}
       <div className={styles.contentLayer} ref={contentRef}>
+        {/* Back Button */}
+        <button
+          className={styles.backBtn}
+          onClick={() => navigate('/')}
+          aria-label="返回首页"
+          title="返回首页"
+        >
+          <span className={styles.backArrow}>←</span>
+          返回
+        </button>
+
         {!showResult ? (
           <>
             {/* Quick Test Badge */}
