@@ -10,13 +10,13 @@ import TraitsCloud from '../components/result/TraitsCloud';
 import SharePanel from '../components/result/SharePanel';
 import { getAnalysis } from '../engine/analysis';
 import { getAnalysisSync } from '../engine/analysis';
-import { QUESTIONS as FULL_QUESTIONS } from '../data/questions';
+import { QUESTIONS_SHORT } from '../data/questions-short';
 import type { DimPair } from '../data/types';
 import styles from './TestPage.module.css';
 
-const BLOCK_SIZE = 30;
+const BLOCK_SIZE = 10;
 
-function TestPageInner() {
+function TestShortPageInner() {
   const { state, selectAnswer, submit, reset, questions } = useQuiz();
   const [showResult, setShowResult] = useState(false);
   const [analyses, setAnalyses] = useState<Record<string, string>>({});
@@ -61,10 +61,8 @@ function TestPageInner() {
   const handleShare = useCallback(() => setShareOpen(true), []);
   const handleCloseShare = useCallback(() => setShareOpen(false), []);
 
-  // Auto-scroll to next question after selection
   const handleSelect = useCallback((qId: number, _oIdx: number) => {
     selectAnswer(qId, _oIdx);
-    // Scroll to next question after a brief delay
     setTimeout(() => {
       const next = document.getElementById(`q-card-${qId + 1}`);
       if (next) {
@@ -87,7 +85,6 @@ function TestPageInner() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // scroll to top on result show
   useEffect(() => {
     if (showResult && resultRef.current) {
       setTimeout(() => {
@@ -100,6 +97,13 @@ function TestPageInner() {
   const progress = state.answers ? Object.keys(state.answers).length : 0;
   const total = questions.length;
 
+  const sectionTitles = [
+    '第一部分：社交与能量 (E/I)',
+    '第二部分：信息处理 (S/N)',
+    '第三部分：决策风格 (T/F)',
+    '第四部分：生活秩序 (J/P)',
+  ];
+
   return (
     <div className={styles.testPage}>
       {/* Three.js Background */}
@@ -111,6 +115,24 @@ function TestPageInner() {
       <div className={styles.contentLayer} ref={contentRef}>
         {!showResult ? (
           <>
+            {/* Quick Test Badge */}
+            <div style={{
+              textAlign: 'center',
+              padding: '0.75rem 0 0',
+            }}>
+              <span style={{
+                display: 'inline-block',
+                padding: '4px 16px',
+                borderRadius: 'var(--radius-full)',
+                border: '1px solid var(--color-jp)',
+                background: 'var(--color-jp-dim)',
+                color: 'var(--color-jp)',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                letterSpacing: '0.05em',
+              }}>40题快速版</span>
+            </div>
+
             {/* Part Navigation */}
             <nav className={styles.partNav} aria-label="题目分区导航">
               {PARTS.map((p, i) => {
@@ -140,8 +162,7 @@ function TestPageInner() {
             <ProgressHeader progress={progress} total={total} />
 
             {/* Questions */}
-            {['第一部分：社交与能量 (E/I)', '第二部分：信息处理 (S/N)',
-              '第三部分：决策风格 (T/F)', '第四部分：生活秩序 (J/P)'].map((title, si) => {
+            {sectionTitles.map((title, si) => {
               const start = si * BLOCK_SIZE + 1;
               const end = (si + 1) * BLOCK_SIZE;
               return (
@@ -177,6 +198,19 @@ function TestPageInner() {
                 <ResultHero result={scoreResult} />
               )}
             </div>
+
+            {/* Quick Test Note */}
+            {scoreResult && (
+              <p style={{
+                textAlign: 'center',
+                fontSize: '0.82rem',
+                color: 'var(--text-muted)',
+                marginTop: '-0.5rem',
+                marginBottom: '2rem',
+              }}>
+                基于40题快速版 · 如需更精准的结果，推荐试试<a href="#/test" style={{ color: 'var(--color-sn)' }}>120题完整版</a>
+              </p>
+            )}
 
             {/* Score Table */}
             {scoreResult && (
@@ -266,10 +300,10 @@ function TestPageInner() {
   );
 }
 
-export default function TestPage() {
+export default function TestShortPage() {
   return (
-    <QuizProvider questions={FULL_QUESTIONS}>
-      <TestPageInner />
+    <QuizProvider questions={QUESTIONS_SHORT}>
+      <TestShortPageInner />
     </QuizProvider>
   );
 }

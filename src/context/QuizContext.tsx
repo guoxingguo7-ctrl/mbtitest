@@ -1,6 +1,6 @@
 // ===== QuizContext: Global State Management =====
 import { createContext, useContext, useReducer, type Dispatch } from 'react';
-import type { Answers, ScoreResult } from '../data/types';
+import type { Answers, ScoreResult, Question } from '../data/types';
 import { calcScores, isComplete } from '../engine/scoring';
 
 // ── State ──
@@ -52,11 +52,12 @@ interface QuizContextValue {
   reset: () => void;
   getProgress: () => { answered: number; total: number; pct: number };
   isComplete: () => boolean;
+  questions: Question[];
 }
 
 const QuizContext = createContext<QuizContextValue | null>(null);
 
-export function QuizProvider({ children }: { children: React.ReactNode }) {
+export function QuizProvider({ children, questions }: { children: React.ReactNode; questions: Question[] }) {
   const [state, dispatch] = useReducer(quizReducer, InitialState);
 
   const selectAnswer = (questionId: number, optionIndex: number) => {
@@ -65,15 +66,19 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
 
   const submit = (): ScoreResult | null => {
     if (state.submitted) return state.result;
-    const result = calcScores(state.answers);
+    const result = calcScores(state.answers, questions);
     dispatch({ type: 'SUBMIT', result });
     return result;
   };
 
   const reset = () => dispatch({ type: 'RESET' });
 
-  const getProgress = () => ({ answered: Object.keys(state.answers).length, total: 120, pct: Math.round((Object.keys(state.answers).length / 120) * 100) });
-  const isCompleteFn = () => isComplete(state.answers);
+  const getProgress = () => {
+    const answered = Object.keys(state.answers).length;
+    const total = questions.length;
+    return { answered, total, pct: Math.round((answered / total) * 100) };
+  };
+  const isCompleteFn = () => isComplete(state.answers, questions);
 
   const value: QuizContextValue = {
     state,
@@ -83,6 +88,7 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
     reset,
     getProgress,
     isComplete: isCompleteFn,
+    questions,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

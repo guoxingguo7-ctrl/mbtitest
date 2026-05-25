@@ -1,6 +1,5 @@
 // ===== MBTI Scoring Engine =====
-import type { Answers, ScoreResult, DimPair, DimKey } from '../data/types';
-import { QUESTIONS } from '../data/questions';
+import type { Answers, ScoreResult, DimPair, DimKey, Question } from '../data/types';
 
 const DIM_PAIRS: Array<{ dim: DimPair; p1: DimKey; p2: DimKey }> = [
   { dim: 'ei', p1: 'E', p2: 'I' },
@@ -12,12 +11,14 @@ const DIM_PAIRS: Array<{ dim: DimPair; p1: DimKey; p2: DimKey }> = [
 /**
  * Calculate MBTI scores from user answers.
  * @param answers - Map of question ID to selected option index (0-3)
+ * @param questions - Question bank to score against
  * @returns ScoreResult with type code, raw sums, and dimension details
  */
-export function calcScores(answers: Answers): ScoreResult {
+export function calcScores(answers: Answers, questions: Question[]): ScoreResult {
+  const idSet = new Set(questions.map(q => q.id));
   const sums: Record<DimKey, number> = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
 
-  for (const q of QUESTIONS) {
+  for (const q of questions) {
     const idx = answers[q.id];
     if (idx === undefined) continue;
     const scores = q.options[idx].scores;
@@ -51,14 +52,15 @@ export function calcScores(answers: Answers): ScoreResult {
 /**
  * Get completion percentage and answered count.
  */
-export function getProgress(answers: Answers): { answered: number; total: number; pct: number } {
+export function getProgress(answers: Answers, questions: Question[]): { answered: number; total: number; pct: number } {
   const answered = Object.keys(answers).length;
-  return { answered, total: QUESTIONS.length, pct: Math.round((answered / QUESTIONS.length) * 100) };
+  const total = questions.length;
+  return { answered, total: questions.length, pct: total > 0 ? Math.round((answered / total) * 100) : 0 };
 }
 
 /**
  * Check if all questions are answered.
  */
-export function isComplete(answers: Answers): boolean {
-  return Object.keys(answers).length >= QUESTIONS.length;
+export function isComplete(answers: Answers, questions: Question[]): boolean {
+  return Object.keys(answers).length >= questions.length;
 }

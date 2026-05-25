@@ -1,11 +1,11 @@
 import { Suspense, lazy } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { QuizProvider } from './context/QuizContext';
 import './styles/global.css';
 import './styles/animations.css';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const TestPage = lazy(() => import('./pages/TestPage'));
+const TestShortPage = lazy(() => import('./pages/TestShortPage'));
 
 function LoadingScreen() {
   return (
@@ -36,15 +36,14 @@ function LoadingScreen() {
 
 export default function App() {
   return (
-    <QuizProvider>
-      <HashRouter>
-        <Suspense fallback={<LoadingScreen />}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/test" element={<TestPage />} />
-          </Routes>
-        </Suspense>
-      </HashRouter>
-    </QuizProvider>
+    <HashRouter>
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/test" element={<TestPage />} />
+          <Route path="/test-short" element={<TestShortPage />} />
+        </Routes>
+      </Suspense>
+    </HashRouter>
   );
 }

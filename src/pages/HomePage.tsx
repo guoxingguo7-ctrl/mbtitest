@@ -29,6 +29,7 @@ export default function HomePage() {
   const stars = useStarfield();
 
   const handleStart = useCallback(() => navigate('/test'), [navigate]);
+  const handleShortStart = useCallback(() => navigate('/test-short'), [navigate]);
 
   return (
     <div className={styles.home}>
@@ -109,6 +110,36 @@ export default function HomePage() {
         </div>
 
         <p className={styles.startHint}>点击圆环，开启你的宇宙之旅</p>
+
+        {/* Short Test Quick Entry */}
+        <button
+          onClick={handleShortStart}
+          style={{
+            display: 'inline-block',
+            marginTop: '1rem',
+            padding: '8px 24px',
+            borderRadius: 'var(--radius-full)',
+            border: '1px solid var(--color-jp)',
+            background: 'var(--color-jp-dim)',
+            color: 'var(--color-jp)',
+            fontSize: '0.85rem',
+            fontWeight: 500,
+            cursor: 'pointer',
+            transition: 'all 0.3s var(--ease-out)',
+            letterSpacing: '0.03em',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = 'var(--color-jp)';
+            e.currentTarget.style.boxShadow = 'var(--glow-jp)';
+            e.currentTarget.style.transform = 'scale(1.03)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.boxShadow = 'none';
+            e.currentTarget.style.transform = 'none';
+          }}
+        >
+          ⚡ 40题快速版
+        </button>
 
         {/* Feature Cards */}
         <div style={{
