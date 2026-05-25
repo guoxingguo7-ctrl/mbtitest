@@ -1,0 +1,291 @@
+/* ===== HomePage: Inner Cosmos ===== */
+
+.home {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Starfield Background (CSS-only) ── */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+  opacity: 0.3;
+}
+
+/* ── Floating Geometries ── */
+.geo {
+  position: fixed;
+  z-index: calc(var(--z-canvas) + 1);
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.geo::before {
+  content: '';
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border: 1px solid var(--color);
+  clip-path: var(--shape);
+  animation: floatGeo var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+/* ── Content Layer ── */
+.content {
+  position: relative;
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-4xl) var(--space-lg);
+  text-align: center;
+}
+
+/* ── Hero ── */
+.hero {
+  max-width: 720px;
+  margin-bottom: var(--space-4xl);
+}
+
+.heroSubtitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.heroSubtitle span {
+  width: 24px;
+  height: 1px;
+  background: var(--glass-border);
+}
+
+.heroTitle {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: var(--space-lg);
+}
+
+.heroTitleGradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-ei) 0%,
+    var(--color-sn) 30%,
+    var(--color-tf) 60%,
+    var(--color-jp) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 4s linear infinite;
+}
+
+.heroDesc {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* ── Type Constellation ── */
+.constellation {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md) var(--space-lg);
+  max-width: 600px;
+  margin: 0 auto var(--space-4xl);
+}
+
+.typeNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  cursor: default;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.typeNode:hover {
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px);
+}
+
+.typeCode {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  transition: color var(--duration-fast);
+}
+
+.typeNode:hover .typeCode {
+  color: var(--text-primary);
+}
+
+.typeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color);
+  opacity: 0.4;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.typeNode:hover .typeDot {
+  opacity: 1;
+  box-shadow: 0 0 8px var(--color);
+}
+
+/* ── Start Ring ── */
+.startRing {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.startRingOuter {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  animation: ringRotate 20s linear infinite;
+}
+
+.startRingInner {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 1px dashed var(--glass-border);
+  animation: ringRotateReverse 15s linear infinite;
+}
+
+.startBtn {
+  position: relative;
+  z-index: 1;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all var(--duration-slow) var(--ease-out);
+  overflow: hidden;
+}
+
+.startBtn:hover {
+  background: var(--glass-bg-active);
+  box-shadow: var(--glow-ei);
+  transform: scale(1.1);
+}
+
+.startBtn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s;
+}
+
+.startBtn:hover::after {
+  left: 200%;
+}
+
+.startHint {
+  margin-top: var(--space-lg);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* ── Footer ── */
+.footer {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.footerText {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .constellation {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+    max-width: 100%;
+  }
+
+  .typeCode {
+    font-size: 0.7rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .startRingOuter {
+    width: 90px;
+    height: 90px;
+  }
+
+  .startRingInner {
+    width: 66px;
+    height: 66px;
+  }
+
+  .startBtn {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+}

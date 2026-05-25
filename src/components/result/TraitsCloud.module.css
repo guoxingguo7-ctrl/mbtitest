@@ -1,0 +1,58 @@
+/* TraitsCloud.module.css */
+/* 特质标签云 —— 轨道散布 + 发光悬停 */
+
+.wrapper {
+  margin-bottom: 2rem;
+}
+
+.heading {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+}
+
+.tag {
+  position: relative;
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.38rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  transition: background 0.25s ease,
+             border-color 0.25s ease,
+             color 0.25s ease,
+             box-shadow 0.3s ease,
+             transform 0.3s ease;
+  cursor: default;
+}
+
+.tag:hover {
+  background: rgba(0, 204, 255, 0.08);
+  border-color: var(--accent);
+  color: var(--text-primary);
+  box-shadow: 0 0 12px rgba(0, 204, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .cloud {
+    gap: 0.45rem;
+    justify-content: flex-start;
+  }
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.32rem 0.7rem;
+  }
+}

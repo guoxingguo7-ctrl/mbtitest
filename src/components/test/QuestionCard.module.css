@@ -1,0 +1,154 @@
+/* QuestionCard.module.css */
+/* 问题卡片 —— 引力场悬浮 + 玻璃态 */
+
+.card {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s ease;
+  overflow: hidden; /* 包含波纹 */
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent);
+}
+
+/* 序号标记 */
+.num {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0, 204, 255, 0.1);
+  width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  letter-spacing: 0.05em;
+}
+
+/* 问题文本 */
+.scenario {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  padding-left: 2.2rem;
+  text-align: left;
+}
+
+/* 选项列表 */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* 单个选项按钮 */
+.optionBtn {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.25s ease,
+              border-color 0.25s ease,
+              color 0.25s ease,
+              transform 0.2s ease;
+  overflow: hidden;
+}
+
+.optionBtn:hover {
+  background: rgba(0, 204, 255, 0.06);
+  border-color: var(--accent);
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+
+/* 选中状态 */
+.optionBtn.selected {
+  background: rgba(0, 204, 255, 0.1);
+  border-color: var(--accent);
+  color: var(--text-primary);
+  box-shadow: 0 0 12px rgba(0, 204, 255, 0.15);
+}
+
+/* 选项标签 A/B/C/D */
+.optLabel {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.optionBtn.selected .optLabel {
+  background: var(--accent);
+  color: #000;
+}
+
+/* 波纹动画元素 */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 204, 255, 0.25);
+  transform: scale(0);
+  animation: rippleOut 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleOut {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .card {
+    padding: 1.15rem;
+  }
+  .scenario {
+    font-size: 0.9rem;
+    padding-left: 0;
+    margin-top: 1.5rem;
+  }
+  .num {
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+  .optionBtn {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,77 @@
+/* SubmitBar.module.css */
+/* 提交栏 —— 粘性底部 + 玻璃态 */
+
+.bar {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-ui);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-top: 1.5rem;
+  background: rgba(5, 8, 22, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--glass-border);
+}
+
+/* 提交按钮 */
+.submitBtn {
+  position: relative;
+  overflow: hidden;
+  padding: 0.8rem 2.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #000;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: box-shadow 0.3s ease,
+              transform 0.2s ease,
+              opacity 0.3s ease;
+  box-shadow: var(--glow-accent);
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(0, 204, 255, 0.45);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 剩余题数提示 */
+.remaining {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .bar {
+    padding: 0.85rem 1rem;
+    flex-wrap: wrap;
+  }
+  .submitBtn {
+    padding: 0.75rem 2rem;
+    font-size: 0.88rem;
+    width: 100%;
+  }
+  .remaining {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.25rem;
+  }
+}

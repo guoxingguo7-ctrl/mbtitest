@@ -1,0 +1,11 @@
+/* ThreeScene.module.css */
+/* Three.js 画布层 —— 在内容层之下，不拦截鼠标事件 */
+
+.canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+}

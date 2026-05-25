@@ -1,0 +1,180 @@
+/* ===== Animation Keyframes: Inner Cosmos ===== */
+
+/* ── Starfield ── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+@keyframes twinkleSlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes drift {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-100vh) rotate(360deg); }
+}
+
+/* ── Geometric Float ── */
+@keyframes floatGeo {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(3deg); }
+  66% { transform: translateY(10px) rotate(-2deg); }
+}
+
+@keyframes floatGeoSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+/* ── Pulsing Glow ── */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--color-ei-glow);
+  }
+  50% {
+    box-shadow: 0 0 24px var(--color-ei-glow), 0 0 48px rgba(56, 189, 248, 0.1);
+  }
+}
+
+@keyframes pulseGlowSn {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--color-sn-glow);
+  }
+  50% {
+    box-shadow: 0 0 24px var(--color-sn-glow), 0 0 48px rgba(167, 139, 250, 0.1);
+  }
+}
+
+/* ── Ring Rotation ── */
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ringRotateReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* ── Scanning Line ── */
+@keyframes scanLine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* ── Wormhole Transition ── */
+@keyframes wormholeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-10deg);
+    filter: blur(12px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes wormholeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(10deg);
+    filter: blur(8px);
+  }
+}
+
+/* ── Ripple Effect ── */
+@keyframes ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* ── Orbit ── */
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+
+@keyframes orbitReverse {
+  from { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+  to { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+}
+
+/* ── Particle Drift ── */
+@keyframes particleDrift {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate(var(--drift-x), var(--drift-y)) scale(0); opacity: 0; }
+}
+
+/* ── Text Shimmer ── */
+@keyframes textShimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ── Fade Slide Up ── */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Scale Bounce ── */
+@keyframes scaleBounce {
+  0% { transform: scale(0.9); }
+  60% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* ── Loading Spinner ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Accordion expand ── */
+@keyframes accordionDown {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--accordion-height);
+    opacity: 1;
+  }
+}
+
+/* ── Gravity Well (option hover) ── */
+@keyframes gravityWell {
+  0% { box-shadow: 0 0 0 0 var(--color-ei-glow); }
+  100% { box-shadow: 0 0 0 8px transparent; }
+}
+
+/* ── Constellation Line ── */
+@keyframes drawLine {
+  from { stroke-dashoffset: var(--line-length); }
+  to { stroke-dashoffset: 0; }
+}
