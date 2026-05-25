@@ -1,7 +1,7 @@
 // ===== QuizContext: Global State Management =====
 import { createContext, useContext, useReducer, type Dispatch } from 'react';
 import type { Answers, ScoreResult } from '../data/types';
-import { calcScores, getProgress, isComplete } from '../engine/scoring';
+import { calcScores, isComplete } from '../engine/scoring';
 
 // ── State ──
 interface QuizState {
@@ -72,7 +72,7 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
 
   const reset = () => dispatch({ type: 'RESET' });
 
-  const getProgress = () => getProgress(state.answers);
+  const getProgress = () => ({ answered: Object.keys(state.answers).length, total: 120, pct: Math.round((Object.keys(state.answers).length / 120) * 100) });
   const isCompleteFn = () => isComplete(state.answers);
 
   const value: QuizContextValue = {

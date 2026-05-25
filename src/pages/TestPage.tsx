@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useQuiz } from '../context/QuizContext';
 import ThreeScene from '../components/test/ThreeScene';
 import QuestionCard from '../components/test/QuestionCard';
@@ -17,7 +16,6 @@ import styles from './TestPage.module.css';
 
 export default function TestPage() {
   const { state, selectAnswer, submit, reset } = useQuiz();
-  const navigate = useNavigate();
   const [showResult, setShowResult] = useState(false);
   const [analyses, setAnalyses] = useState<Record<string, string>>({});
   const [shareOpen, setShareOpen] = useState(false);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import styles from './ThreeScene.module.css';
 
@@ -17,8 +17,6 @@ export default function ThreeScene() {
   const rafRef = useRef<number>(0);
   const prevTimeRef = useRef<number>(0);
   const pausedRef = useRef(false);
-
-  const initRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
