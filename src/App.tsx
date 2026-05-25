@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
+import { QuizProvider } from './context/QuizContext';
 import './styles/global.css';
 import './styles/animations.css';
 
@@ -35,13 +36,15 @@ function LoadingScreen() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/test" element={<TestPage />} />
-        </Routes>
-      </Suspense>
-    </HashRouter>
+    <QuizProvider>
+      <HashRouter>
+        <Suspense fallback={<LoadingScreen />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/test" element={<TestPage />} />
+          </Routes>
+        </Suspense>
+      </HashRouter>
+    </QuizProvider>
   );
 }
