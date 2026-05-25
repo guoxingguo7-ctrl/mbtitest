@@ -9,6 +9,7 @@ import ResultHero from '../components/result/ResultHero';
 import DimBars from '../components/result/DimBars';
 import TraitsCloud from '../components/result/TraitsCloud';
 import SharePanel from '../components/result/SharePanel';
+import SimilarTypes from '../components/result/SimilarTypes';
 import { getAnalysis } from '../engine/analysis';
 import { getAnalysisSync } from '../engine/analysis';
 import { QUESTIONS as FULL_QUESTIONS } from '../data/questions';
@@ -226,6 +227,9 @@ function TestPageInner() {
 
             {/* Traits */}
             {scoreResult && <TraitsCloud type={scoreResult.type} />}
+
+            {/* Similar Types */}
+            {scoreResult && <SimilarTypes result={scoreResult} />}
 
             {/* Analysis */}
             <div className={styles.analysisPanel}>

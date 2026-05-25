@@ -8,6 +8,7 @@ import SubmitBar from '../components/test/SubmitBar';
 import ResultHero from '../components/result/ResultHero';
 import DimBars from '../components/result/DimBars';
 import TraitsCloud from '../components/result/TraitsCloud';
+import SimilarTypes from '../components/result/SimilarTypes';
 import SharePanel from '../components/result/SharePanel';
 import { getAnalysis } from '../engine/analysis';
 import { getAnalysisSync } from '../engine/analysis';
@@ -260,6 +261,9 @@ function TestShortPageInner() {
 
             {/* Traits */}
             {scoreResult && <TraitsCloud type={scoreResult.type} />}
+
+            {/* Similar Types */}
+            {scoreResult && <SimilarTypes result={scoreResult} />}
 
             {/* Analysis */}
             <div className={styles.analysisPanel}>
