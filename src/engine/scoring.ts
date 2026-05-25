@@ -15,7 +15,6 @@ const DIM_PAIRS: Array<{ dim: DimPair; p1: DimKey; p2: DimKey }> = [
  * @returns ScoreResult with type code, raw sums, and dimension details
  */
 export function calcScores(answers: Answers, questions: Question[]): ScoreResult {
-  const idSet = new Set(questions.map(q => q.id));
   const sums: Record<DimKey, number> = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
 
   for (const q of questions) {
