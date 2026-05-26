@@ -1,5 +1,5 @@
 /* ThreeScene.module.css */
-/* Three.js 画布层 —— 在内容层之下，不拦截鼠标事件 */
+/* 3D 画布层 —— 固定背景，不拦截鼠标 */
 
 .canvas {
   position: fixed;
@@ -8,4 +8,20 @@
   height: 100vh;
   z-index: var(--z-canvas);
   pointer-events: none;
+}
+
+/* CRT 扫描线叠加在画布之上 */
+.canvas::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: var(--z-canvas);
 }

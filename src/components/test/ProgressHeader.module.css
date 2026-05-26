@@ -1,19 +1,16 @@
 /* ProgressHeader.module.css */
-/* 进度头部 —— 粘性定位 + 光晕进度条 */
+/* 游戏 HP 条风格 —— 波普复古后现代 */
 
 .header {
   position: sticky;
   top: 0;
   z-index: var(--z-ui);
-  background: rgba(5, 8, 22, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--color-bg) 92%, #000);
   padding: 0.9rem 1.25rem 0.75rem;
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: var(--grid-border-w) solid #000;
   margin-bottom: 1.25rem;
 }
 
-/* 进度文字 */
 .stats {
   display: flex;
   justify-content: space-between;
@@ -21,44 +18,47 @@
   font-size: 0.78rem;
   color: var(--text-muted);
   margin-bottom: 0.55rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .counter {
   font-variant-numeric: tabular-nums;
-  font-weight: 600;
-  color: var(--accent);
+  font-weight: 800;
+  color: var(--pop-cyan);
 }
 
 .hint {
   font-size: 0.72rem;
-  opacity: 0.6;
+  opacity: 0.7;
+  color: var(--text-dim);
 }
 
-/* 进度条轨道 */
+/* 游戏 HP 条轨道 */
 .bar {
   width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 2px;
+  height: 8px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   overflow: hidden;
 }
 
-/* 进度条填充 —— 带动画 */
+/* HP 条填充 —— 分段波普四色 */
 .fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--color-ei), var(--color-sn), var(--color-tf), var(--color-jp));
-  background-size: 300% 100%;
-  animation: shimmerBar 3s ease infinite;
-  border-radius: 2px;
-  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@keyframes shimmerBar {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  background: repeating-linear-gradient(
+    90deg,
+    var(--pop-cyan) 0px,
+    var(--pop-cyan) 4px,
+    var(--pop-magenta) 4px,
+    var(--pop-magenta) 8px,
+    var(--pop-yellow) 8px,
+    var(--pop-yellow) 12px,
+    var(--pop-teal) 12px,
+    var(--pop-teal) 16px
+  );
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* 响应式 */
@@ -68,5 +68,8 @@
   }
   .stats {
     font-size: 0.72rem;
+  }
+  .bar {
+    height: 6px;
   }
 }

@@ -1,5 +1,5 @@
 /* SubmitBar.module.css */
-/* 提交栏 —— 粘性底部 + 玻璃态 */
+/* 游戏提交栏 —— 波普复古后现代 */
 
 .bar {
   position: sticky;
@@ -11,51 +11,72 @@
   gap: 1rem;
   padding: 1rem 1.25rem;
   margin-top: 1.5rem;
-  background: rgba(5, 8, 22, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid var(--glass-border);
+  background: color-mix(in srgb, var(--color-bg) 94%, #000);
+  border-top: var(--grid-border-w) solid #000;
 }
 
-/* 提交按钮 */
+/* 波普风格提交按钮 */
 .submitBtn {
   position: relative;
   overflow: hidden;
   padding: 0.8rem 2.5rem;
   font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: #000;
-  background: var(--accent);
-  border: none;
-  border-radius: var(--radius-full);
+  background: var(--pop-cyan);
+  border: var(--grid-border-w) solid #000;
   cursor: pointer;
-  transition: box-shadow 0.3s ease,
-              transform 0.2s ease,
+  transition: transform 0.15s ease,
+              box-shadow 0.2s ease,
               opacity 0.3s ease;
-  box-shadow: var(--glow-accent);
+  box-shadow: var(--game-outset);
 }
 
 .submitBtn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 0 28px rgba(0, 204, 255, 0.45);
+  transform: translateY(-1px);
+  box-shadow:
+    4px 4px 0 #000,
+    0 0 20px rgba(56, 189, 248, 0.35);
 }
 
 .submitBtn:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(1px);
+  box-shadow: var(--game-inset);
 }
 
 .submitBtn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
   box-shadow: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-dim);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 波普风格横纹纹理 */
+.submitBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    #000 2px,
+    #000 3px
+  );
+  pointer-events: none;
 }
 
 /* 剩余题数提示 */
 .remaining {
   font-size: 0.78rem;
   color: var(--text-muted);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* 响应式 */

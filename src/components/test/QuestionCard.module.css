@@ -1,63 +1,79 @@
 /* QuestionCard.module.css */
-/* 问题卡片 —— 引力场悬浮 + 玻璃态 */
+/* 游戏槽位卡片 —— 波普复古后现代 */
 
 .card {
   position: relative;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  border: var(--grid-border-w) solid #000;
   padding: 1.5rem;
   margin-bottom: 1.25rem;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.3s ease;
-  overflow: hidden; /* 包含波纹 */
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.25s ease;
+  overflow: hidden;
+  box-shadow: var(--game-outset);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-glow);
-  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow:
+    4px 4px 0 #000,
+    0 0 20px rgba(56, 189, 248, 0.18);
 }
 
-/* 序号标记 */
+/* 背景本戴点 */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: radial-gradient(circle, var(--pop-cyan) 1px, transparent 1px);
+  background-size: 6px 6px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 序号标记 —— 方形游戏徽章 */
 .num {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: 0;
+  left: 0;
   font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--accent);
-  background: rgba(0, 204, 255, 0.1);
-  width: 1.6rem;
-  height: 1.6rem;
+  font-weight: 800;
+  color: #000;
+  background: var(--pop-cyan);
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
   letter-spacing: 0.05em;
+  border-right: var(--grid-border-w) solid #000;
+  border-bottom: var(--grid-border-w) solid #000;
+  z-index: 1;
 }
 
 /* 问题文本 */
 .scenario {
+  position: relative;
+  z-index: 1;
   font-size: 0.95rem;
   line-height: 1.7;
   color: var(--text-primary);
   margin-bottom: 1.25rem;
-  padding-left: 2.2rem;
+  padding-left: 2.4rem;
   text-align: left;
 }
 
 /* 选项列表 */
 .options {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-/* 单个选项按钮 */
+/* 选项按钮 —— 波普风格 */
 .optionBtn {
   position: relative;
   display: flex;
@@ -65,37 +81,50 @@
   gap: 0.75rem;
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
+  border: var(--grid-border-w) solid #000;
+  background: var(--color-bg);
   color: var(--text-secondary);
   font-size: 0.88rem;
   line-height: 1.55;
   text-align: left;
   cursor: pointer;
-  transition: background 0.25s ease,
-              border-color 0.25s ease,
-              color 0.25s ease,
-              transform 0.2s ease;
+  transition: background 0.2s ease,
+              color 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.2s ease;
   overflow: hidden;
+  box-shadow: var(--game-outset);
 }
 
 .optionBtn:hover {
-  background: rgba(0, 204, 255, 0.06);
-  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.06);
   color: var(--text-primary);
-  transform: translateX(4px);
+  transform: translateX(3px);
+  box-shadow:
+    3px 3px 0 #000,
+    0 0 10px rgba(56, 189, 248, 0.12);
 }
 
-/* 选中状态 */
+/* 选中状态 —— 波普青高亮 */
 .optionBtn.selected {
-  background: rgba(0, 204, 255, 0.1);
-  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.1);
   color: var(--text-primary);
-  box-shadow: 0 0 12px rgba(0, 204, 255, 0.15);
+  box-shadow:
+    3px 3px 0 #000,
+    0 0 16px rgba(56, 189, 248, 0.22);
 }
 
-/* 选项标签 A/B/C/D */
+.optionBtn.selected::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--pop-cyan);
+}
+
+/* 选项标签 A/B/C/D —— 方形 */
 .optLabel {
   flex-shrink: 0;
   width: 1.5rem;
@@ -104,31 +133,32 @@
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
-  font-weight: 700;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text-muted);
-  transition: background 0.25s ease, color 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .optionBtn.selected .optLabel {
-  background: var(--accent);
+  background: var(--pop-cyan);
   color: #000;
+  border-color: var(--pop-cyan);
 }
 
-/* 波纹动画元素 */
+/* 波纹动画 —— 波普风格方块波纹 */
 .ripple {
   position: absolute;
-  border-radius: 50%;
-  background: rgba(0, 204, 255, 0.25);
+  background: var(--pop-cyan);
+  opacity: 0.3;
   transform: scale(0);
-  animation: rippleOut 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: ripplePop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   pointer-events: none;
 }
 
-@keyframes rippleOut {
+@keyframes ripplePop {
   to {
-    transform: scale(4);
+    transform: scale(3);
     opacity: 0;
   }
 }
@@ -144,8 +174,9 @@
     margin-top: 1.5rem;
   }
   .num {
-    top: 0.5rem;
-    left: 0.5rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.65rem;
   }
   .optionBtn {
     padding: 0.75rem 0.85rem;
